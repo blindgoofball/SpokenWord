@@ -1,6 +1,5 @@
 from random import choices
 import difflib
-import speech
 
 class SentenceManager:
     def __init__(self):
@@ -34,3 +33,7 @@ class SentenceManager:
         for tag, i1, i2, j1, j2 in matcher.get_opcodes():
             if tag in ['replace', 'delete', 'insert']:
                 self.mistakes+=1
+    def sentenceFinished(self, value):
+        typedWords=value.split()
+        expectedWords=self.sentences[self.currentSentence].split()
+        return len(typedWords) >= len(expectedWords) and value.endswith(' ')
