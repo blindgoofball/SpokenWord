@@ -18,14 +18,16 @@ class SentenceManager:
     def pickSentences(self, amount=30):
         sentences=self.loadSentences()
         return choices(sentences, k=30)
+    def getCurrentSentence(self):
+        return self.sentences[self.currentSentence]
     def finishSentence(self, value):
         words=len(value.split())
         self.totalWords+=words
-        self.checkMistakes(self.sentences[self.currentSentence], value)
+        self.checkMistakes(self.getCurrentSentence(), value)
         self.currentSentence+=1
         if self.currentSentence >= len(self.sentences):
             return None
-        return self.sentences[self.currentSentence]
+        return self.getCurrentSentence()
     def checkMistakes(self, original, typed):
         expected=original.split()
         provided=typed.split()
@@ -35,5 +37,5 @@ class SentenceManager:
                 self.mistakes+=1
     def sentenceFinished(self, value):
         typedWords=value.split()
-        expectedWords=self.sentences[self.currentSentence].split()
+        expectedWords=self.getCurrentSentence().split()
         return len(typedWords) >= len(expectedWords) and value.endswith(' ')

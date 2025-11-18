@@ -14,7 +14,7 @@ class SpokenWord(wx.Frame):
         self.textField.Bind(wx.EVT_TEXT, self.onText)
         self.textField.Bind(wx.EVT_CHAR_HOOK, self.onKey)
         self.Show()
-        speech.speak(self.sentenceManager.sentences[self.sentenceManager.currentSentence])
+        speech.speak(self.sentenceManager.getCurrentSentence())
     def onText(self, evt):
         typed=self.textField.GetValue()
         if self.sentenceManager.sentenceFinished(typed):
@@ -26,7 +26,7 @@ class SpokenWord(wx.Frame):
                 self.finish()
     def onKey(self, evt):
         if evt.GetKeyCode() == wx.WXK_TAB:
-            speech.speak(self.sentenceManager.sentences[self.sentenceManager.currentSentence])
+            speech.speak(self.sentenceManager.getCurrentSentence())
         else:
             evt.Skip()
     def finish(self):
