@@ -15,9 +15,9 @@ class SentenceManager:
             return []
         sentences=[s.strip() for s in sentences if s]
         return sentences
-    def pickSentences(self, amount=30):
+    def pickSentences(self, amount=20):
         sentences=self.loadSentences()
-        return choices(sentences, k=30)
+        return choices(sentences, k=amount)
     def getCurrentSentence(self):
         return self.sentences[self.currentSentence]
     def finishSentence(self, value):
