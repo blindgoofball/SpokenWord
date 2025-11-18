@@ -1,3 +1,4 @@
+import time
 import wx
 from sentencemanager import SentenceManager
 import speech
@@ -6,6 +7,7 @@ class SpokenWord(wx.Frame):
     def __init__(self):
         super().__init__(None, title='Spoken Word')
         self.sentenceManager=SentenceManager()
+        self.startTime=None
         self.panel=wx.Panel(self)
         self.sizer=wx.BoxSizer(wx.VERTICAL)
         self.sentenceDisplay=wx.StaticText(self.panel, label=self.sentenceManager.getCurrentSentence())
@@ -16,7 +18,6 @@ class SpokenWord(wx.Frame):
         self.textField.Bind(wx.EVT_TEXT, self.onText)
         self.textField.Bind(wx.EVT_CHAR_HOOK, self.onKey)
         self.Show()
-        speech.speak(self.sentenceManager.getCurrentSentence())
     def onText(self, evt):
         typed=self.textField.GetValue()
         if self.sentenceManager.sentenceFinished(typed):
@@ -33,8 +34,14 @@ class SpokenWord(wx.Frame):
         else:
             evt.Skip()
     def finish(self):
+        endTime=time.time()
+        totalTime=int(endTime-self.startTime)
+        wpm=int(self.sentenceManager.totalWords/(totalTime/60))
         accuracy=100-(self.sentenceManager.mistakes/self.sentenceManager.totalWords*100)
-        stats=f"Complete! You had an accuracy of {accuracy:.1f}%."
+        stats=f"Complete!\nYour average speed was {wpm} words per minute.\nYou had an accuracy of {accuracy:.1f}%."
         dlg=wx.MessageDialog(self, stats, 'Complete!')
         dlg.ShowModal()
         self.Close()
+    def startTimer(self):
+        self.startTime=time.time()
+        speech.speak(self.sentenceManager.getCurrentSentence())
