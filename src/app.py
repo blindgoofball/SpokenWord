@@ -8,8 +8,10 @@ class SpokenWord(wx.Frame):
         self.sentenceManager=SentenceManager()
         self.panel=wx.Panel(self)
         self.sizer=wx.BoxSizer(wx.VERTICAL)
+        self.sentenceDisplay=wx.StaticText(self.panel, label=self.sentenceManager.getCurrentSentence())
+        self.sizer.Add(self.sentenceDisplay, 0, wx.ALL|wx.EXPAND, 5)
         self.textField=wx.TextCtrl(self.panel)
-        self.sizer.Add(self.textField, 1, wx.ALL|wx.EXPAND)
+        self.sizer.Add(self.textField, 1, wx.ALL|wx.EXPAND, 5)
         self.panel.SetSizer(self.sizer)
         self.textField.Bind(wx.EVT_TEXT, self.onText)
         self.textField.Bind(wx.EVT_CHAR_HOOK, self.onKey)
@@ -21,6 +23,7 @@ class SpokenWord(wx.Frame):
             self.textField.Clear()
             nextSentence=self.sentenceManager.finishSentence(typed)
             if nextSentence:
+                self.sentenceDisplay.SetLabel(self.sentenceManager.getCurrentSentence())
                 speech.speak(nextSentence)
             else:
                 self.finish()
